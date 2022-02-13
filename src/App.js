@@ -1,33 +1,36 @@
-import React from 'react';
-import { Route, BrowserRouter} from 'react-router-dom';
-import FinalScreen from './pages/FinalScreen';
+import './App.css';
+import {BrowserRouter, BrowserRouter as Router, Link, Navigate, Route,  Routes } from 'react-router-dom';
+import Home from './components/pages/home/Home';
 
-import Settings from './pages/Settings';
-import {Container, Typography} from "@mui/material";
-import {Box} from "@mui/system"
-import QuestionsPage from './pages/QuestionsPage';
+import Profile from './components/pages/profile/Profile';
+import Login from './components/pages/login/Login';
+import Register from './components/pages/register/Register';
+import { useContext } from 'react';
+import { AuthContext } from './context/AuthContext';
+
 function App() {
-
+  const {user} = useContext(AuthContext)
   return (
-  <BrowserRouter>
-    
-    <div className="grid-container">
-<main>
-  <Container maxWidth="small">
-  <Box textAlign="center" mt={5}>
-  <Route path="/" component={Settings} exact ></Route>
-  <Typography variant="h2" fontWeight="bold">Quiz App</Typography>
-  <Route path="/questions" component={QuestionsPage}></Route>
-  <Route path = "/score" component={FinalScreen}></Route>
-  </Box>
-  </Container>
-</main>
+    <BrowserRouter>
+      
+    <Routes>
 
+      <Route exact path="/"
+       element={user ? <Home /> : <Login /> }/>
 
-</div>
-</BrowserRouter>
+      <Route path="/login"
+       element={user ? <Navigate to="/" /> : <Login />}/>
 
-  )
+      <Route path="/register"
+       element={user ? <Navigate to="/" /> : <Register />}/>
+
+      <Route path="/profile/:username" 
+      element={<Profile />}/>
+
+    </Routes>
+  
+    </BrowserRouter>
+  );
 }
 
 export default App;
